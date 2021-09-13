@@ -1,0 +1,9 @@
+name: KayTeamAPI
+version: '${project.version}'
+main: org.kayteam.kayteamapi.KayTeamAPI
+api-version: 1.13
+prefix: KT-API
+softdepend: [ PlaceholderAPI ]
+authors: [ SirOswaldo, segu23 ]
+description: KayTeam API for Easy plugin development.
+website: https://kayteam.org
