@@ -1,65 +1,96 @@
-/*
- *   Copyright (C) 2021 SirOswaldo
- *
- *       This program is free software: you can redistribute it and/or modify
- *       it under the terms of the GNU General Public License as published by
- *       the Free Software Foundation, either version 3 of the License, or
- *       (at your option) any later version.
- *
- *       This program is distributed in the hope that it will be useful,
- *       but WITHOUT ANY WARRANTY; without even the implied warranty of
- *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *       GNU General Public License for more details.
- *
- *       You should have received a copy of the GNU General Public License
- *       along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package org.kayteam.kayteamapi.command;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
+public class SimpleCommand extends Command implements CommandExecutor, TabCompleter{
 
-    public SimpleCommand(JavaPlugin javaPlugin, String command) {
-        PluginCommand pluginCommand = javaPlugin.getCommand(command);
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(this);
-            pluginCommand.setTabCompleter(this);
-            javaPlugin.getLogger().info("The command '" + command + "' registered");
-        } else {
-            javaPlugin.getLogger().info("The command '" + command + "' no can registered");
-        }
+    private final String command;
+
+    public SimpleCommand(String command) {
+        super(command);
+        this.command = command;
     }
 
+    public void onPlayerExecute(Player sender, String[] args) {}
+    public List<String> onPlayerTabComplete(Player sender, String[] args) { return new ArrayList<>(); }
+    public  void onConsoleExecute(ConsoleCommandSender sender, String[] args) {}
+    public List<String> onConsoleTabComplete(ConsoleCommandSender sender, String[] args) { return new ArrayList<>(); }
+
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] arguments) {
-        if (commandSender instanceof Player) {
-            onPlayerExecute((Player) commandSender, arguments);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (sender instanceof Player) {
+            onPlayerExecute((Player) sender, args);
         } else {
-            onConsoleExecute((ConsoleCommandSender) commandSender, command, arguments);
+            onConsoleExecute((ConsoleCommandSender) sender, args);
         }
         return true;
     }
-    public void onPlayerExecute(Player player, String[] arguments) {}
-    public void onConsoleExecute(ConsoleCommandSender console, Command command, String[] arguments) {}
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] arguments) {
-        if (commandSender instanceof Player) {
-            return onPlayerTabComplete((Player) commandSender, command, arguments);
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+        if (sender instanceof Player) {
+            onPlayerExecute((Player) sender, args);
         } else {
-            return onConsoleTabComplete((ConsoleCommandSender) commandSender, command, arguments);
+            onConsoleExecute((ConsoleCommandSender) sender, args);
+        }
+        return true;
+    }
+
+    public void registerCommand(JavaPlugin javaPlugin) {
+        PluginCommand pluginCommand = javaPlugin.getCommand(command);
+        if (pluginCommand == null) {
+            try {
+                final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                bukkitCommandMap.setAccessible(true);
+                CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+                commandMap.register(command, this);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            pluginCommand.setExecutor(this);
+            pluginCommand.setTabCompleter(this);
         }
     }
-    public List<String> onPlayerTabComplete(Player player, Command command, String[] arguments)  {
-        return new ArrayList<>();
-    }
-    public List<String> onConsoleTabComplete(ConsoleCommandSender console, Command command, String[] arguments)  { return new ArrayList<>(); }
 
+
+    @NotNull
+    @Override
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        if (sender instanceof Player) {
+            return onPlayerTabComplete((Player) sender, args);
+        } else {
+            return onConsoleTabComplete((ConsoleCommandSender) sender, args);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args, @Nullable Location location) throws IllegalArgumentException {
+        if (sender instanceof Player) {
+            return onPlayerTabComplete((Player) sender, args);
+        } else {
+            return onConsoleTabComplete((ConsoleCommandSender) sender, args);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (sender instanceof Player) {
+            return onPlayerTabComplete((Player) sender, args);
+        } else {
+            return onConsoleTabComplete((ConsoleCommandSender) sender, args);
+        }
+    }
 }
