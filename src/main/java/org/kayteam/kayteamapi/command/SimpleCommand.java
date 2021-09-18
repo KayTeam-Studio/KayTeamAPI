@@ -21,6 +21,23 @@ public class SimpleCommand extends Command implements CommandExecutor, TabComple
         this.command = command;
     }
 
+    public void registerCommand(JavaPlugin javaPlugin) {
+        PluginCommand pluginCommand = javaPlugin.getCommand(command);
+        if (pluginCommand == null) {
+            try {
+                final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                bukkitCommandMap.setAccessible(true);
+                CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+                commandMap.register(command, this);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            pluginCommand.setExecutor(this);
+            pluginCommand.setTabCompleter(this);
+        }
+    }
+
     public void onPlayerExecute(Player sender, String[] args) {}
     public List<String> onPlayerTabComplete(Player sender, String[] args) { return new ArrayList<>(); }
     public  void onConsoleExecute(ConsoleCommandSender sender, String[] args) {}
@@ -45,24 +62,6 @@ public class SimpleCommand extends Command implements CommandExecutor, TabComple
         }
         return true;
     }
-
-    public void registerCommand(JavaPlugin javaPlugin) {
-        PluginCommand pluginCommand = javaPlugin.getCommand(command);
-        if (pluginCommand == null) {
-            try {
-                final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                bukkitCommandMap.setAccessible(true);
-                CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-                commandMap.register(command, this);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            pluginCommand.setExecutor(this);
-            pluginCommand.setTabCompleter(this);
-        }
-    }
-
 
     @NotNull
     @Override

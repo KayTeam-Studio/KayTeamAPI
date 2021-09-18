@@ -31,6 +31,7 @@ public class InventoryBuilder {
     private final int rows;
     private final HashMap<Integer, GetItem> items = new HashMap<>();
     private final HashMap<Integer, Boolean> update = new HashMap<>();
+    private final HashMap<Integer, Integer> intervals = new HashMap<>();
     private final HashMap<Integer, LeftAction> leftActions =  new HashMap<>();
     private final HashMap<Integer, RightAction> rightActions =  new HashMap<>();
     private final HashMap<Integer, MiddleAction> middleActions =  new HashMap<>();
@@ -99,16 +100,26 @@ public class InventoryBuilder {
     }
 
     public boolean isUpdatable(int slot) {
-        if (update.containsKey(slot)) {
-            return update.get(slot);
-        }
-        return false;
+        return update.containsKey(slot);
     }
     public void setUpdatable(int slot, boolean update) {
         this.update.put(slot, update);
     }
     public void removeUpdatable(int slot) {
         update.remove(slot);
+    }
+
+    public boolean hasUpdateInterval(int slot) {
+        return intervals.containsKey(slot);
+    }
+    public void setUpdateInterval(int slot, int interval) {
+        intervals.put(slot, interval);
+    }
+    public int getUpdateInterval(int slot) {
+        if (!intervals.containsKey(slot)) {
+            return 20;
+        }
+        return intervals.get(slot);
     }
 
     public void addLeftAction(int slot, LeftAction action) {
