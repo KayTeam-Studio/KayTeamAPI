@@ -356,6 +356,13 @@ public class Yaml {
                     if (defConfig.isString(path)) {
                         fileConfiguration.set(path, defConfig.getString(path));
                         saveFileConfiguration();
+                        String text = defConfig.getString(path);
+                        for (String[] replacement:replacements) {
+                            if (text.contains(replacement[0])) {
+                                text = text.replaceAll(replacement[0], replacement[1]);
+                            }
+                        }
+                        return text;
                     }
                 }
             }
