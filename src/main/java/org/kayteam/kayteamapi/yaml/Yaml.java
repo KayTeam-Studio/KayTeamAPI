@@ -210,10 +210,10 @@ public class Yaml {
     }
 
 
-    public void sendSimpleMessage(CommandSender commandSender, Object message) {
+    public static void sendSimpleMessage(CommandSender commandSender, Object message) {
         sendSimpleMessage(commandSender, message, new String[][] {});
     }
-    public void sendSimpleMessage(CommandSender commandSender, Object message, String[][] replacements) {
+    public static void sendSimpleMessage(CommandSender commandSender, Object message, String[][] replacements) {
         if (message.getClass().getSimpleName().equals("ArrayList")) {
             List<String> messages = (List<String>) message;
             for (String m:messages) {
