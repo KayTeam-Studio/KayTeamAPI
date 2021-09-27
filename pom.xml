@@ -6,18 +6,11 @@
 
     <groupId>org.kayteam</groupId>
     <artifactId>KayTeamAPI</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <packaging>jar</packaging>
 
     <name>KayTeamAPI</name>
     <description>KayTeam API for Easy plugin development.</description>
-
-    <distributionManagement>
-        <repository>
-            <id>local-repository</id>
-            <url>http://20.98.165.115:1000/snapshots</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <java.version>1.8</java.version>
