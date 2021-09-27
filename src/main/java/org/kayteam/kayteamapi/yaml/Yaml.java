@@ -582,7 +582,7 @@ public class Yaml {
                     }
                 }
             }catch (NoSuchFieldError e){
-                if(itemStack.getType().equals(Material.LEGACY_SKULL)){
+                if(itemStack.getType().equals(Material.LEGACY_SKULL_ITEM)){
                     if (contains(path + ".head-owner")){
                         if (isString(path + ".head-owner")){
                             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
@@ -649,10 +649,19 @@ public class Yaml {
                 }
             }
             // SKULL TYPE
-            if(item.getType().equals(Material.PLAYER_HEAD)){
-                SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-                if (skullMeta.hasOwner()) {
-                    set(path + ".head-owner", Objects.requireNonNull(skullMeta.getOwningPlayer()).getName());
+            try{
+                if(item.getType().equals(Material.PLAYER_HEAD)){
+                    SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
+                    if (skullMeta.hasOwner()) {
+                        set(path + ".head-owner", Objects.requireNonNull(skullMeta.getOwningPlayer()).getName());
+                    }
+                }
+            }catch (NoSuchFieldError e){
+                if(item.getType().equals(Material.LEGACY_SKULL_ITEM)) {
+                    SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
+                    if (skullMeta.hasOwner()) {
+                        set(path + ".head-owner", Objects.requireNonNull(skullMeta.getOwningPlayer()).getName());
+                    }
                 }
             }
         }
