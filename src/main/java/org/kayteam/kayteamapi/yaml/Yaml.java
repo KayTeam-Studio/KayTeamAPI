@@ -570,13 +570,26 @@ public class Yaml {
                 }
             }
             // SKULL ITEM
-            if(itemStack.getType().equals(Material.PLAYER_HEAD)){
-                if (contains(path + ".head-owner")){
-                    if (isString(path + ".head-owner")){
-                        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-                        assert skullMeta != null;
-                        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
-                        itemStack.setItemMeta(skullMeta);
+            try{
+                if(itemStack.getType().equals(Material.PLAYER_HEAD)){
+                    if (contains(path + ".head-owner")){
+                        if (isString(path + ".head-owner")){
+                            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+                            assert skullMeta != null;
+                            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
+                            itemStack.setItemMeta(skullMeta);
+                        }
+                    }
+                }
+            }catch (NoSuchFieldError e){
+                if(itemStack.getType().equals(Material.LEGACY_SKULL)){
+                    if (contains(path + ".head-owner")){
+                        if (isString(path + ".head-owner")){
+                            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+                            assert skullMeta != null;
+                            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
+                            itemStack.setItemMeta(skullMeta);
+                        }
                     }
                 }
             }
