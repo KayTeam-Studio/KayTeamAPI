@@ -486,7 +486,8 @@ public class Yaml {
 
 
     public ItemStack getItemStack(String path) {
-        XMaterial xMaterial = XMaterial.valueOf((getString(path + ".material")));
+        XMaterial xMaterial = XMaterial.matchXMaterial(getString(path + ".material")).orElse(null);
+        assert xMaterial != null;
         Material material = xMaterial.parseMaterial();
         int amount = getInt(path + ".amount", 1);
         // MaterialData
