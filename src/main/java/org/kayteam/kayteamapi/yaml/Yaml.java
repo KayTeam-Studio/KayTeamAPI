@@ -17,6 +17,7 @@
 
 package org.kayteam.kayteamapi.yaml;
 
+import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTType;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -485,7 +486,8 @@ public class Yaml {
 
 
     public ItemStack getItemStack(String path) {
-        Material material = Material.getMaterial(getString(path + ".material"));
+        XMaterial xMaterial = XMaterial.valueOf((getString(path + ".material")));
+        Material material = xMaterial.parseMaterial();
         int amount = getInt(path + ".amount", 1);
         // MaterialData
         short data = -1;
