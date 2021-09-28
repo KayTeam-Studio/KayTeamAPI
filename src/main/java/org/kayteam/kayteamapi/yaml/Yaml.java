@@ -570,27 +570,24 @@ public class Yaml {
                 }
             }
             // SKULL ITEM
-            try{
-                if(itemStack.getType().equals(Material.PLAYER_HEAD)){
-                    if (contains(path + ".head-owner")){
-                        if (isString(path + ".head-owner")){
-                            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-                            assert skullMeta != null;
-                            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
-                            itemStack.setItemMeta(skullMeta);
-                        }
-                    }
+            boolean isSkull = false;
+            try {
+                Material m = Material.getMaterial("PLAYER_HEAD");
+                isSkull = true;
+            } catch (IllegalArgumentException e) {
+                try {
+                    Material m = Material.valueOf("LEGACY_SKULL_ITEM");
+                    isSkull = true;
+                } catch (IllegalArgumentException ignored) {
+
                 }
-            }catch (NoSuchFieldError e){
-                if(itemStack.getType().equals(Material.LEGACY_SKULL_ITEM)){
-                    if (contains(path + ".head-owner")){
-                        if (isString(path + ".head-owner")){
-                            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-                            assert skullMeta != null;
-                            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
-                            itemStack.setItemMeta(skullMeta);
-                        }
-                    }
+            }
+            if (contains(path + ".head-owner")){
+                if (isString(path + ".head-owner")){
+                    SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+                    assert skullMeta != null;
+                    skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
+                    itemStack.setItemMeta(skullMeta);
                 }
             }
             return itemStack;

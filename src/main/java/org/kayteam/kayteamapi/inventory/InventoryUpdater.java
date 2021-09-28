@@ -1,7 +1,9 @@
 package org.kayteam.kayteamapi.inventory;
 
+import org.bukkit.Bukkit;
 import org.kayteam.kayteamapi.scheduler.Task;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class InventoryUpdater extends Task {
@@ -9,8 +11,7 @@ public class InventoryUpdater extends Task {
     private final InventoryManager inventoryManager;
     private final InventoryBuilder inventoryBuilder;
 
-    private int interval = 0;
-    private int maxInterval = 0;
+    private HashMap<Integer, Integer> intervals = new HashMap<>();
 
     public InventoryUpdater(InventoryManager inventoryManager, InventoryBuilder inventoryBuilder) {
         super(inventoryManager.getJavaPlugin(), 1);
@@ -25,12 +26,15 @@ public class InventoryUpdater extends Task {
             for (int slot = 0; slot < (inventoryBuilder.getRows() * 9); slot++) {
                 if (inventoryBuilder.getInventory().getSize() > slot) {
                     if (inventoryBuilder.isUpdatable(slot)) {
-                        if (inventoryBuilder.getUpdateInterval(slot) == interval) {
+                        if (!intervals.containsKey(slot)) {
+                            intervals.put(slot, inventoryBuilder.getUpdateInterval(slot));
+                        }
+                        int interval = intervals.get(slot);
+                        if (interval == 0) {
+                            intervals.put(slot, inventoryBuilder.getUpdateInterval(slot));
                             inventoryBuilder.getInventory().setItem(slot, inventoryBuilder.getItem(slot).getItem());
                         } else {
-                            if (inventoryBuilder.getUpdateInterval(slot) > maxInterval) {
-                                maxInterval = inventoryBuilder.getUpdateInterval(slot);
-                            }
+                            intervals.put(slot, interval - 1);
                         }
                     } else {
                         if (Objects.equals(inventoryBuilder.getInventory().getItem(slot), inventoryBuilder.getItem(slot).getItem())) {
@@ -38,10 +42,6 @@ public class InventoryUpdater extends Task {
                         }
                     }
                 }
-            }
-            interval++;
-            if (interval >= maxInterval) {
-                interval = 0;
             }
         } else {
             stopScheduler();
