@@ -40,7 +40,10 @@ public abstract class Task{
     public void stopScheduler(){
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         scheduler.cancelTask(task.getTaskId());
+        stopActions();
     }
 
     public abstract void actions();
+
+    public void stopActions(){}
 }
