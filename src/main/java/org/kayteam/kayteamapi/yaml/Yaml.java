@@ -495,6 +495,8 @@ public class Yaml {
             if (isInt(path + ".data")) {
                 data = (short) getInt(path + ".data");
             }
+        }else{
+            data = xMaterial.getData();
         }
         if (material != null) {
             ItemStack itemStack;
@@ -560,10 +562,10 @@ public class Yaml {
                             }else if(isInt(path + ".nbt." + key)){
                                 nbtItem.setInteger(key, getInt(path + ".nbt." + key));
                             }else{
-                                Bukkit.getLogger().log(Level.SEVERE, "[CrowtySkyPvP] An error has occurred trying load NBT: "+key+". Please enter a valid type: STRING/INTEGER.");
+                                javaPlugin.getLogger().log(Level.SEVERE, "An error has occurred trying load NBT: "+key+". Please enter a valid type: STRING/INTEGER.");
                             }
                         }catch (Exception e){
-                            Bukkit.getLogger().log(Level.SEVERE, "[CrowtySkyPvP] An error has occurred trying load NBT: "+key);
+                            javaPlugin.getLogger().log(Level.SEVERE, "An error has occurred trying load NBT: "+key);
                         }
                     }
                     itemStack = nbtItem.getItem();
@@ -574,7 +576,7 @@ public class Yaml {
             // SKULL ITEM
             boolean isSkull = false;
             try {
-                Material m = Material.getMaterial("PLAYER_HEAD");
+                Material m = Material.valueOf("PLAYER_HEAD");
                 isSkull = true;
             } catch (IllegalArgumentException e) {
                 try {
@@ -649,14 +651,14 @@ public class Yaml {
             }
             // SKULL TYPE
             try{
-                if(item.getType().equals(Material.PLAYER_HEAD)){
+                if(item.getType().toString().equals("PLAYER_HEAD")){
                     SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
                     if (skullMeta.hasOwner()) {
                         set(path + ".head-owner", Objects.requireNonNull(skullMeta.getOwningPlayer()).getName());
                     }
                 }
             }catch (NoSuchFieldError e){
-                if(item.getType().equals(Material.LEGACY_SKULL_ITEM)) {
+                if(item.getType().toString().equals("LEGACY_SKULL_ITEM")) {
                     SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
                     if (skullMeta.hasOwner()) {
                         set(path + ".head-owner", Objects.requireNonNull(skullMeta.getOwningPlayer()).getName());
