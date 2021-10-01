@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Skull;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -710,6 +711,31 @@ public class Yaml {
                         newLore.add(line);
                     }
                     meta.setLore(newLore);
+                }
+            }
+            try{
+                if(item.getType().toString().equals("PLAYER_HEAD")){
+                    SkullMeta skullMeta = (SkullMeta) meta;
+                    String skullOwner = skullMeta.getOwner();
+                    for(String[] values:replacements){
+                        skullOwner = skullOwner.replaceAll(values[0], values[1]);
+                    }
+                    if (player != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                        skullOwner = PlaceholderAPI.setPlaceholders(player, skullOwner);
+                    }
+                    skullMeta.setOwner(skullOwner);
+                }
+            }catch (Exception e){
+                if(item.getType().toString().equals("LEGACY_SKULL_ITEM")){
+                    SkullMeta skullMeta = (SkullMeta) meta;
+                    String skullOwner = skullMeta.getOwner();
+                    for(String[] values:replacements){
+                        skullOwner = skullOwner.replaceAll(values[0], values[1]);
+                    }
+                    if (player != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                        skullOwner = PlaceholderAPI.setPlaceholders(player, skullOwner);
+                    }
+                    skullMeta.setOwner(skullOwner);
                 }
             }
         }
