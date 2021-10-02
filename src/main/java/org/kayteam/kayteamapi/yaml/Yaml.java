@@ -592,7 +592,7 @@ public class Yaml {
                 if (isString(path + ".head-owner")){
                     SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
                     assert skullMeta != null;
-                    skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(getString(path + ".head-owner")));
+                    skullMeta.setOwner(getString(path + ".head-owner"));
                     itemStack.setItemMeta(skullMeta);
                 }
             }
