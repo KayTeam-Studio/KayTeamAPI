@@ -604,7 +604,7 @@ public class Yaml {
                 errorMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cERROR"));
             }
             error.setItemMeta(errorMeta);
-            return new ItemStack(Material.DIRT);
+            return error;
         }
     }
     public void setItemStack(String path, ItemStack item) {
