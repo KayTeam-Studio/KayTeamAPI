@@ -1,6 +1,6 @@
 name: KayTeamAPI
 version: '${project.version}'
-main: org.kayteam.kayteamapi.KayTeamAPI
+main: org.kayteam.api.KayTeamAPI
 api-version: 1.13
 prefix: KT-API
 softdepend: [ PlaceholderAPI ]
