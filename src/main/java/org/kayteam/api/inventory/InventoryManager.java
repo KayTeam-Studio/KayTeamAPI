@@ -42,7 +42,6 @@ public class InventoryManager implements Listener {
                 }
             }
             inventoryBuilder.setInventory(inventory);
-            Bukkit.getScheduler().runTaskLater(javaPlugin, () -> player.openInventory(inventory), 1);
             SimpleScheduler simpleScheduler = new SimpleScheduler(javaPlugin, 1);
             simpleScheduler.addScheduleAction((bukkitTask) -> {
                 player.openInventory(inventory);
