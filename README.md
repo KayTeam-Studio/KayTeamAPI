@@ -21,7 +21,7 @@ repositories {
     maven {url'https://jitpack.io' }
 }
 ```
-
+ 
 ```groovy
 dependencies {
     implementation 'com.github.KayTeam-Studio:KayTeamAPI:VERSION'
