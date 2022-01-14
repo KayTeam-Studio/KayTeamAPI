@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>KayTeamAPI</name>
-    <description>KayTeam API for Easy plugin development.</description>
+    <description>KayTeam API for easy plugin development.</description>
 
     <properties>
         <java.version>1.8</java.version>
