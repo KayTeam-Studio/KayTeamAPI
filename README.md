@@ -28,3 +28,6 @@ dependencies {
 }
 ```
 Check the last released version in Releases section
+
+## How to use
+https://github.com/KayTeam-Studio/KayTeamAPI/wiki
