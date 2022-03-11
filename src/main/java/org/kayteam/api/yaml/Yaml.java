@@ -18,6 +18,8 @@
 package org.kayteam.api.yaml;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTType;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -37,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
@@ -583,6 +586,22 @@ public class Yaml {
 
                 }
             }
+            if (isSkull) {
+                if (contains(path + ".base64-texture")) {
+                    SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+                    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                    profile.getProperties().put("textures", new Property("textures", getString(path + ".base64-texture")));
+                    Field profileField = null;
+                    try {
+                        profileField = meta.getClass().getDeclaredField("profile");
+                        profileField.setAccessible(true);
+                        profileField.set(meta, profile);
+                    } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+                        e.printStackTrace();
+                    }
+                    itemStack.setItemMeta(meta);
+                }
+            }
             if (contains(path + ".head-owner")){
                 if (isString(path + ".head-owner")){
                     SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
@@ -602,6 +621,7 @@ public class Yaml {
             return error;
         }
     }
+
     public void setItemStack(String path, ItemStack item) {
         set(path + ".material", item.getType().toString());
         set(path + ".amount", item.getAmount());
