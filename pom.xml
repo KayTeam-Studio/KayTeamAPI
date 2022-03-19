@@ -6,7 +6,7 @@
 
     <groupId>org.kayteam</groupId>
     <artifactId>KayTeamAPI</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.9</version>
     <packaging>jar</packaging>
 
     <name>KayTeamAPI</name>

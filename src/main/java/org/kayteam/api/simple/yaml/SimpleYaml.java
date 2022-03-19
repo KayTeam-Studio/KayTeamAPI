@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -31,10 +32,11 @@ public class SimpleYaml {
     private final static HashMap<String, String> globalReplacements = new HashMap<>();
     private final HashMap<String, String> replacements = new HashMap<>();
 
-    private final JavaPlugin javaPlugin;
+    private JavaPlugin javaPlugin = null;
 
     private final String directory;
     private final String name;
+    private File file;
     private YamlConfiguration yamlConfiguration;
 
     public SimpleYaml(JavaPlugin javaPlugin, String directory, String name) {
@@ -46,6 +48,11 @@ public class SimpleYaml {
     public SimpleYaml(JavaPlugin javaPlugin, String name) {
         this.javaPlugin  = javaPlugin;
         directory = javaPlugin.getDataFolder().getPath();
+        this.name = name;
+    }
+
+    public SimpleYaml(String directory, String name) {
+        this.directory = directory;
         this.name = name;
     }
 
@@ -66,20 +73,20 @@ public class SimpleYaml {
     public void reloadYamlFile() {
         File dir = new File(directory);
         if (!dir.exists()) dir.mkdirs();
-        File file = new File(directory, name + ".yml");
+        file = new File(directory, name + ".yml");
         if (!file.exists()) {
             try {
                 if (file.createNewFile()) {
-                    if (javaPlugin.getResource(name + ".yml") != null) {
-                        if(file.length() == 0){
-                            javaPlugin.saveResource(name + ".yml", true);
+                    if (javaPlugin != null) {
+                        if (javaPlugin.getResource(name + ".yml") != null) {
+                            if(file.length() == 0){
+                                javaPlugin.saveResource(name + ".yml", true);
+                            }
                         }
                     }
                 }
-            } catch (IOException e) {
-                javaPlugin.getLogger().info("The file " + name + ".yml can no be create.");
-            } catch (IllegalArgumentException e) {
-                javaPlugin.getLogger().info("The file " + name + ".yml no exist in the plugin jar, creating empty file.");
+            } catch (IOException | IllegalArgumentException e) {
+                e.printStackTrace();
             }
         }
         try {
@@ -122,7 +129,7 @@ public class SimpleYaml {
     }
 
     public void generateBackup() {
-        SimpleYaml backup = new SimpleYaml(javaPlugin, directory, name + "-backup");
+        SimpleYaml backup = new SimpleYaml(directory, name + "-backup");
         backup.registerYamlFile();
         backup.saveWithOtherFileConfiguration(yamlConfiguration);
     }
@@ -132,6 +139,19 @@ public class SimpleYaml {
         saveYamlFile();
     }
 
+    public List<SimpleYaml> getYamlFiles(JavaPlugin javaPlugin, String directory) {
+        return getYamlFiles(javaPlugin.getDataFolder() + File.separator + directory);
+    }
+
+    public List<SimpleYaml> getYamlFiles(String directory) {
+        List<SimpleYaml> simpleYamlList = new ArrayList<>();
+        File dir = new File(directory);
+        if (dir.exists()) {
+            File[] files = dir.listFiles((dir1, name) -> name.endsWith(".yml"));
+            if (files != null) for (File file:files) simpleYamlList.add(new SimpleYaml(directory, file.getName().replaceAll(".yml", "")));
+        }
+        return simpleYamlList;
+    }
 
     public String getAboveComment(String path) {
         return yamlConfiguration.getAboveComment(path);
