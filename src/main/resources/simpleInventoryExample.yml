@@ -1,0 +1,40 @@
+# The menu name is the id to use in your plugins to call this inventory
+exampleMenu:
+  # The title to the inventory
+  # You can use PlaceholdersAPI here, but there are no can update the text
+  title: "&6Example title"
+  # The rows are what rows can contain the inventory
+  # One row are nine slots
+  rows: 3
+  # The update interval is the tics amount the inventory can be update items
+  # This only affect to all items what contain -> update: true
+  update-inverval: 1
+  # This will serve so that the player can open the inventory from a command
+  # This can be a String or StringList for various commands
+  # open-command:
+  #   - "examplemenu"
+  #   - "example"
+  open-command: "examplemenu"
+  # Requirements are useful to control who opens the inventory
+  open-requirements:
+    # Here can be put yours requirements
+    requirements:
+      # Example for all requirements types
+      has-permission:
+        type: "HAS_PERMISSION"
+        permission: "example.menu"
+      has-money:
+        type: "HAS_MONEY"
+        amount: 1000.0
+      equals:
+        type: "EQUALS"
+        input: "%the_placeholderapi_variable%"
+        output: "hello"
+      equals-ignore-case:
+        type: "EQUALS_IGNORE_CASE"
+        input: "%the_placeholderapi_variable%"
+        output: "heLlo"
+
+    deny-actions:
+      - "[message] &cYou don't have permission to open &f%inventory-name% &cinventory!"
+      - "[sound] VILLAGER_NO"
