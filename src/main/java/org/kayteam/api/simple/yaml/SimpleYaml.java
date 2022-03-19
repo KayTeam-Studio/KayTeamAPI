@@ -143,7 +143,7 @@ public class SimpleYaml {
         return getYamlFiles(javaPlugin.getDataFolder() + File.separator + directory);
     }
 
-    public List<SimpleYaml> getYamlFiles(String directory) {
+    public static List<SimpleYaml> getYamlFiles(String directory) {
         List<SimpleYaml> simpleYamlList = new ArrayList<>();
         File dir = new File(directory);
         if (dir.exists()) {
