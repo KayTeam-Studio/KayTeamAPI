@@ -5,7 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.kayteam.api.yaml.Yaml;
+import org.kayteam.api.simple.yaml.SimpleYaml;
 
 import java.awt.*;
 import java.time.Instant;
@@ -27,7 +27,7 @@ public class DiscordUtil {
         return builder.build();
     }
 
-    public WebhookEmbed getWebhookEmbedFromFile(Yaml file, String path){
+    public WebhookEmbed getWebhookEmbedFromFile(SimpleYaml file, String path){
         OffsetDateTime offsetDateTime = null;
         Integer color = null;
         String description = null;
@@ -78,7 +78,7 @@ public class DiscordUtil {
             author = new WebhookEmbed.EmbedAuthor(file.getString(path+".authorName"), authorIcon, authorUrl);
         }
         if(file.contains(path+".fields")){
-            for(String fieldKey : Objects.requireNonNull(file.getFileConfiguration().getConfigurationSection(path + ".fields")).getKeys(false)){
+            for(String fieldKey : Objects.requireNonNull(file.getConfigurationSection(path + ".fields")).getKeys(false)){
                 boolean inline = false;
                 String name = null;
                 String value = null;
@@ -98,7 +98,7 @@ public class DiscordUtil {
         return new WebhookEmbed(offsetDateTime, color, description, thumbnailUrl, imageUrl, footer, title, author, fields);
     }
 
-    public WebhookEmbed getWebhookEmbedFromFile(Yaml file, String path, String[][] replacements){
+    public WebhookEmbed getWebhookEmbedFromFile(SimpleYaml file, String path, String[][] replacements){
         OffsetDateTime offsetDateTime = null;
         Integer color = null;
         String description = null;
@@ -149,7 +149,7 @@ public class DiscordUtil {
             author = new WebhookEmbed.EmbedAuthor(file.getString(path+".authorName", replacements), authorIcon, authorUrl);
         }
         if(file.contains(path+".fields")){
-            for(String fieldKey : Objects.requireNonNull(file.getFileConfiguration().getConfigurationSection(path + ".fields")).getKeys(false)){
+            for(String fieldKey : Objects.requireNonNull(file.getConfigurationSection(path + ".fields")).getKeys(false)){
                 boolean inline = false;
                 String name = null;
                 String value = null;
@@ -169,7 +169,7 @@ public class DiscordUtil {
         return new WebhookEmbed(offsetDateTime, color, description, thumbnailUrl, imageUrl, footer, title, author, fields);
     }
 
-    public EmbedBuilder getEmbedFromFile(Yaml file, String path){
+    public EmbedBuilder getEmbedFromFile(SimpleYaml file, String path){
         EmbedBuilder embedBuilder = new EmbedBuilder();
         if(file.contains(path+".authorName")){
             String authorIcon = null;
@@ -212,7 +212,7 @@ public class DiscordUtil {
             embedBuilder.setTimestamp(Instant.now());
         }
         if(file.contains(path+".fields")){
-            for(String fieldKey : Objects.requireNonNull(file.getFileConfiguration().getConfigurationSection(path + ".fields")).getKeys(false)){
+            for(String fieldKey : Objects.requireNonNull(file.getConfigurationSection(path + ".fields")).getKeys(false)){
                 boolean inline = false;
                 String name = null;
                 String value = null;
@@ -231,7 +231,7 @@ public class DiscordUtil {
         return embedBuilder;
     }
 
-    public EmbedBuilder getEmbedFromFile(Yaml file, String path, String[][] replacements){
+    public EmbedBuilder getEmbedFromFile(SimpleYaml file, String path, String[][] replacements){
         EmbedBuilder embedBuilder = new EmbedBuilder();
         if(file.contains(path+".authorName")){
             String authorIcon = null;
@@ -275,7 +275,7 @@ public class DiscordUtil {
             embedBuilder.setTimestamp(Instant.now());
         }
         if(file.contains(path+".fields")){
-            for(String fieldKey : Objects.requireNonNull(file.getFileConfiguration().getConfigurationSection(path + ".fields")).getKeys(false)){
+            for(String fieldKey : Objects.requireNonNull(file.getConfigurationSection(path + ".fields")).getKeys(false)){
                 boolean inline = false;
                 String name = null;
                 String value = null;

@@ -42,13 +42,17 @@ public class InventoryManager implements Listener {
                 }
             }
             inventoryBuilder.setInventory(inventory);
-            SimpleScheduler simpleScheduler = new SimpleScheduler(javaPlugin, 1);
-            simpleScheduler.addScheduleAction((bukkitTask) -> {
+            SimpleScheduler openInventoryScheduler = new SimpleScheduler(javaPlugin, 1);
+            openInventoryScheduler.addScheduleAction(bukkitTask -> {
                 player.openInventory(inventory);
                 return true;
             });
-            simpleScheduler.addScheduleAction(new InventoryUpdater(this, inventoryBuilder));
-            simpleScheduler.runSchedulerTimer();
+            openInventoryScheduler.runSchedulerLater();
+            if (inventoryBuilder.getUpdateInterval() > 0) {
+                SimpleScheduler inventoryUpdateScheduler = new SimpleScheduler(javaPlugin, 1);
+                inventoryUpdateScheduler.addScheduleAction(new InventoryUpdater(this, inventoryBuilder));
+                inventoryUpdateScheduler.runSchedulerTimer();
+            }
         }
     }
 

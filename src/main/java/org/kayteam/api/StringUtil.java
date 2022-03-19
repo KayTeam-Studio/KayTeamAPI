@@ -2,27 +2,32 @@ package org.kayteam.api;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class StringUtil {
 
-    public static String replace(String text, String[][] replacements) {
-        return replace(text, null, replacements);
+    public static String replaceText(String text, String[][] replacements) {
+        return replaceText(text, null, replacements);
     }
 
-    public static String replace(String text, Player player, String[][] replacements) {
-        String result = text;
-        for (String[] replacement:replacements) {
-            String from = replacement[0];
-            String to = replacement[1];
-            result = result.replaceAll(from, to);
+    public static String replaceText(String text, Player player, String[][] replacements) {
+        for (String[] values:replacements){
+            text = text.replaceAll(values[0], values[1]);
         }
-        if (player != null) {
-            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-                result = PlaceholderAPI.setPlaceholders(player, result);
-            }
+        text = applyPlaceholderAPI(text, player);
+        return text;
+    }
+
+    public static String applyPlaceholderAPI(String text, Player player) {
+        if (player != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            text = PlaceholderAPI.setPlaceholders(player, text);
         }
-        return result;
+        return text;
+    }
+
+    public static String addColor(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
 }

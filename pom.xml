@@ -6,7 +6,7 @@
 
     <groupId>org.kayteam</groupId>
     <artifactId>KayTeamAPI</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.9</version>
     <packaging>jar</packaging>
 
     <name>KayTeamAPI</name>
@@ -79,6 +79,11 @@
         <repository>
             <id>enginehub-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+        <!-- loohp-repo -->
+        <repository>
+            <id>loohp-repo</id>
+            <url>https://repo.loohpjames.com/repository</url>
         </repository>
     </repositories>
 
@@ -159,6 +164,12 @@
             <version>1.5.25</version>
             <scope>provided</scope>
         </dependency>
-
+        <!-- YamlConfiguration -->
+        <dependency>
+            <groupId>com.loohp</groupId>
+            <artifactId>YamlConfiguration</artifactId>
+            <version>1.0.1.4</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

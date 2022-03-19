@@ -29,9 +29,9 @@ public class InventoryBuilder {
     private Inventory inventory;
     private final String title;
     private final int rows;
+    private final int updateInterval;
     private final HashMap<Integer, GetItem> items = new HashMap<>();
-    private final HashMap<Integer, Boolean> update = new HashMap<>();
-    private final HashMap<Integer, Integer> intervals = new HashMap<>();
+    private final HashMap<Integer, Boolean> updateItems = new HashMap<>();
     private final HashMap<Integer, LeftAction> leftActions =  new HashMap<>();
     private final HashMap<Integer, RightAction> rightActions =  new HashMap<>();
     private final HashMap<Integer, MiddleAction> middleActions =  new HashMap<>();
@@ -42,14 +42,22 @@ public class InventoryBuilder {
     public InventoryBuilder() {
         title = "Default Title";
         rows = 3;
+        this.updateInterval = 0;
     }
     public InventoryBuilder(String title) {
         this.title = title;
         rows = 3;
+        this.updateInterval = 0;
     }
     public InventoryBuilder(String title, int rows) {
         this.title = title;
         this.rows = rows;
+        this.updateInterval = 0;
+    }
+    public InventoryBuilder(String title, int rows, int updateInterval) {
+        this.title = title;
+        this.rows = rows;
+        this.updateInterval = updateInterval;
     }
 
     public Inventory getInventory() {
@@ -99,27 +107,21 @@ public class InventoryBuilder {
         items.remove(slot);
     }
 
-    public boolean isUpdatable(int slot) {
-        return update.containsKey(slot);
-    }
-    public void setUpdatable(int slot, boolean update) {
-        this.update.put(slot, update);
-    }
-    public void removeUpdatable(int slot) {
-        update.remove(slot);
+    public int getUpdateInterval() {
+        return updateInterval;
     }
 
-    public boolean hasUpdateInterval(int slot) {
-        return intervals.containsKey(slot);
-    }
-    public void setUpdateInterval(int slot, int interval) {
-        intervals.put(slot, interval);
-    }
-    public int getUpdateInterval(int slot) {
-        if (!intervals.containsKey(slot)) {
-            return 20;
+    public boolean isUpdateItem(int slot) {
+        if (updateItems.containsKey(slot)) {
+            return updateItems.get(slot);
         }
-        return intervals.get(slot);
+        return false;
+    }
+    public void setUpdateItem(int slot, boolean value) {
+        updateItems.put(slot, value);
+    }
+    public void removeUpdateItem(int slot) {
+        updateItems.remove(slot);
     }
 
     public void addLeftAction(int slot, LeftAction action) {
