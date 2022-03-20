@@ -78,9 +78,18 @@ public class SimpleYaml {
             try {
                 if (file.createNewFile()) {
                     if (javaPlugin != null) {
-                        if (javaPlugin.getResource(name + ".yml") != null) {
+                        javaPlugin.getLogger().info(directory);
+                        String localDirectory = "";
+                        if (!directory.equals(javaPlugin.getDataFolder().getPath())) {
+                            localDirectory = StringUtils.remove(directory, javaPlugin.getDataFolder().getPath());
+                            localDirectory = StringUtils.replace(localDirectory, File.separator, "/");
+                            localDirectory = StringUtils.removeStart(localDirectory, "/");
+                            localDirectory = localDirectory + "/";
+                        }
+                        javaPlugin.getLogger().info(localDirectory);
+                        if (javaPlugin.getResource(  localDirectory + name + ".yml") != null) {
                             if(file.length() == 0){
-                                javaPlugin.saveResource(name + ".yml", true);
+                                javaPlugin.saveResource(localDirectory + name + ".yml", true);
                             }
                         }
                     }
