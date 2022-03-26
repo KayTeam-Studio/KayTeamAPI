@@ -630,11 +630,11 @@ public class SimpleYaml {
         }
     }
 
-    public static void sendMessage(CommandSender commandSender, Object message) {
-        sendMessage(commandSender, message, new String[][] {});
+    public static void sendSimpleMessage(CommandSender commandSender, Object message) {
+        sendSimpleMessage(commandSender, message, new String[][] {});
     }
 
-    public static void sendMessage(CommandSender commandSender, Object message, String[][] replacements) {
+    public static void sendSimpleMessage(CommandSender commandSender, Object message, String[][] replacements) {
         List<String> messages = new ArrayList<>();
         if (message.getClass().getSimpleName().equals("ArrayList")) {
             messages = (List<String>) message;
