@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -477,32 +478,35 @@ public class SimpleYaml {
                 }
                 itemStack = nbtItem.getItem();
             }
-            // SKULL ITEM
-            boolean isSkull = false;
-            try {
-                Material m = Material.valueOf("PLAYER_HEAD");
-                isSkull = true;
-            } catch (IllegalArgumentException e) {
-                try {
-                    Material m = Material.valueOf("LEGACY_SKULL_ITEM");
-                    isSkull = true;
-                } catch (IllegalArgumentException ignored) {
-
+            // LEATHER ARMOR ITEM
+            if (xMaterial.parseMaterial().equals((XMaterial.matchXMaterial("LEATHER_HELMET").orElse(null).parseMaterial()))
+                    || xMaterial.parseMaterial().equals((XMaterial.matchXMaterial("LEATHER_CHESTPLATE").orElse(null).parseMaterial()))
+                    || xMaterial.parseMaterial().equals((XMaterial.matchXMaterial("LEATHER_LEGGINGS").orElse(null).parseMaterial()))
+                    || xMaterial.parseMaterial().equals((XMaterial.matchXMaterial("LEATHER_BOOTS").orElse(null).parseMaterial()))) {
+                if (contains(path + ".color") && isString(path + ".color")) {
+                    // color: "#E5E533"
+                    String colorString = StringUtils.replace(getString(path + ".color"), "#", "0x");
+                    int color = Integer.parseInt(colorString);
+                    LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                    leatherArmorMeta.setColor(Color.fromRGB(color));
+                    itemStack.setItemMeta(leatherArmorMeta);
                 }
             }
-            if (isSkull) {
+            // SKULL ITEM
+            if (xMaterial.parseMaterial().equals((XMaterial.matchXMaterial("PLAYER_HEAD").orElse(null).parseMaterial()))) {
                 if (contains(path + ".base64-texture")) {
                     String value = getString(path + ".base64-texture");
                     return getCustomTextureHead(value);
                 }
-            }
-            if (contains(path + ".head-owner")){
-                if (isString(path + ".head-owner")){
-                    SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-                    assert skullMeta != null;
-                    skullMeta.setOwner(getString(path + ".head-owner"));
-                    itemStack.setItemMeta(skullMeta);
+                if (contains(path + ".head-owner")){
+                    if (isString(path + ".head-owner")){
+                        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+                        assert skullMeta != null;
+                        skullMeta.setOwner(getString(path + ".head-owner"));
+                        itemStack.setItemMeta(skullMeta);
+                    }
                 }
+
             }
             return replace(itemStack, replacements);
         } else {
@@ -579,6 +583,17 @@ public class SimpleYaml {
                 }else if(nbtItem.getType(key).equals(NBTType.NBTTagInt)){
                     set(path + ".nbt." + key, nbtItem.getInteger(key));
                 }
+            }
+            // LEATHER ARMOR ITEM
+            if (item.getType().equals(Objects.requireNonNull(XMaterial.matchXMaterial("LEATHER_HELMET").orElse(null)).parseMaterial())
+                    || item.getType().equals(Objects.requireNonNull(XMaterial.matchXMaterial("LEATHER_CHESTPLATE").orElse(null)).parseMaterial())
+                    || item.getType().equals(Objects.requireNonNull(XMaterial.matchXMaterial("LEATHER_LEGGINGS").orElse(null)).parseMaterial())
+                    || item.getType().equals(Objects.requireNonNull(XMaterial.matchXMaterial("LEATHER_BOOTS").orElse(null)).parseMaterial())) {
+                // color: "#E5E533"
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) item.getItemMeta();
+                int color = leatherArmorMeta.getColor().asRGB();
+                String colorString = String.valueOf(color);
+                set(path + ".color", StringUtils.replace(colorString, "0x", "#"));
             }
             // SKULL TYPE
             try{
