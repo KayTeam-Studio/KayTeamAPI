@@ -10,3 +10,11 @@ stringList:
   - "Line 1"
   - "Line 2"
   - "Line 3"
+subPath:
+  integer: 1
+  double: 2.01
+  string: "Text"
+  stringList:
+    - "Line 1"
+    - "Line 2"
+    - "Line 3"
