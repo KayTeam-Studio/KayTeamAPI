@@ -3,6 +3,7 @@ package org.kayteam.api;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kayteam.api.bStats.Metrics;
 import org.kayteam.api.discord.DiscordUtil;
+import org.kayteam.api.simple.yaml.SimpleYamlTest;
 
 public final class KayTeamAPI extends JavaPlugin {
 
@@ -12,6 +13,7 @@ public final class KayTeamAPI extends JavaPlugin {
     public void onEnable() {
         bStats();
         enableDiscordUtil();
+        new SimpleYamlTest(this);
     }
 
     @Override
