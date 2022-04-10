@@ -1,8 +1,13 @@
 package org.kayteam.api;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kayteam.api.bStats.Metrics;
 import org.kayteam.api.discord.DiscordUtil;
+import org.kayteam.api.simple.yaml.SimpleYaml;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class KayTeamAPI extends JavaPlugin {
 
@@ -12,7 +17,6 @@ public final class KayTeamAPI extends JavaPlugin {
     public void onEnable() {
         bStats();
         enableDiscordUtil();
-        BrandSender.sendBrandMessage(this, "&aEnabled");
     }
 
     @Override

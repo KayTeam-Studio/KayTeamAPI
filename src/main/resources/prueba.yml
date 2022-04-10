@@ -1,0 +1,12 @@
+replacements:
+  global:
+    prefix: "&6&lKay&f&lTeam&c&lGlobal"
+  local:
+    prefix: "&6&lKay&f&lTeam&c&lLocal"
+integer: 1
+double: 2.01
+string: "Text"
+stringList:
+  - "Line 1"
+  - "Line 2"
+  - "Line 3"

@@ -1,55 +1,45 @@
 package org.kayteam.api.simple.inventory;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.kayteam.api.StringUtil;
 import org.kayteam.api.simple.inventory.action.Action;
-import org.kayteam.api.simple.inventory.requirement.Requirement;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
 
-    private final ItemStack itemStack;
+    private final int slot;
+    private final int priority;
     private final boolean update;
     private final String displayName;
     private final List<String> lore;
-    private final int priority;
-    private List<Requirement> viewRequirements;
-    private List<Requirement> clickRequirements;
-    private List<Action> clickActions;
-    private List<Requirement> leftClickRequirements;
-    private List<Action> leftClickActions;
-    private List<Requirement> leftShiftClickRequirements;
-    private List<Action> leftShiftClickActions;
-    private List<Requirement> middleClickRequirements;
-    private List<Action> middleClickActions;
-    private List<Requirement> rightClickRequirements;
-    private List<Action> rightClickActions;
-    private List<Requirement> rightShiftClickRequirements;
-    private List<Action> rightShiftClickActions;
+    private ItemStack itemStack;
 
-    public Item(ItemStack itemStack, boolean update, String displayName, List<String> lore, int priority) {
-        this.itemStack = itemStack;
+    private final List<Action> leftActions = new ArrayList<>();
+    private final List<Action> leftShiftActions = new ArrayList<>();
+    private final List<Action> middleActions = new ArrayList<>();
+    private final List<Action> rightActions = new ArrayList<>();
+    private final List<Action> rightShiftActions = new ArrayList<>();
+
+    public Item(int slot, int priority, boolean update, String displayName, List<String> lore) {
+        this.slot = slot;
+        this.priority = priority;
         this.update = update;
         this.displayName = displayName;
         this.lore = lore;
-        this.priority = priority;
-        this.viewRequirements = new ArrayList<>();
-        this.clickRequirements = new ArrayList<>();
-        this.clickActions = new ArrayList<>();
-        this.leftClickRequirements = new ArrayList<>();
-        this.leftClickActions = new ArrayList<>();
-        this.leftShiftClickRequirements = new ArrayList<>();
-        this.leftShiftClickActions = new ArrayList<>();
-        this.middleClickRequirements = new ArrayList<>();
-        this.middleClickActions = new ArrayList<>();
-        this.rightClickRequirements = new ArrayList<>();
-        this.rightClickActions = new ArrayList<>();
-        this.rightShiftClickRequirements = new ArrayList<>();
-        this.rightShiftClickActions = new ArrayList<>();
+    }
+
+    public int getSlot() {
+        return slot;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     public boolean isUpdate() {
@@ -64,135 +54,52 @@ public class Item {
         return lore;
     }
 
-    public int getPriority() {
-        return priority;
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
-    public List<Requirement> getViewRequirements() {
-        return viewRequirements;
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
-    public void setViewRequirements(List<Requirement> viewRequirements) {
-        this.viewRequirements = viewRequirements;
+    public List<Action> getLeftActions() {
+        return leftActions;
     }
 
-    public List<Requirement> getClickRequirements() {
-        return clickRequirements;
+    public List<Action> getLeftShiftActions() {
+        return leftShiftActions;
     }
 
-    public void setClickRequirements(List<Requirement> clickRequirements) {
-        this.clickRequirements = clickRequirements;
+    public List<Action> getMiddleActions() {
+        return middleActions;
     }
 
-    public List<Action> getClickActions() {
-        return clickActions;
+    public List<Action> getRightActions() {
+        return rightActions;
     }
 
-    public void setClickActions(List<Action> clickActions) {
-        this.clickActions = clickActions;
+    public List<Action> getRightShiftActions() {
+        return rightShiftActions;
     }
 
-    public List<Requirement> getLeftClickRequirements() {
-        return leftClickRequirements;
-    }
-
-    public void setLeftClickRequirements(List<Requirement> leftClickRequirements) {
-        this.leftClickRequirements = leftClickRequirements;
-    }
-
-    public List<Action> getLeftClickActions() {
-        return leftClickActions;
-    }
-
-    public void setLeftClickActions(List<Action> leftClickActions) {
-        this.leftClickActions = leftClickActions;
-    }
-
-    public List<Requirement> getLeftShiftClickRequirements() {
-        return leftShiftClickRequirements;
-    }
-
-    public void setLeftShiftClickRequirements(List<Requirement> leftShiftClickRequirements) {
-        this.leftShiftClickRequirements = leftShiftClickRequirements;
-    }
-
-    public List<Action> getLeftShiftClickActions() {
-        return leftShiftClickActions;
-    }
-
-    public void setLeftShiftClickActions(List<Action> leftShiftClickActions) {
-        this.leftShiftClickActions = leftShiftClickActions;
-    }
-
-    public List<Requirement> getMiddleClickRequirements() {
-        return middleClickRequirements;
-    }
-
-    public void setMiddleClickRequirements(List<Requirement> middleClickRequirements) {
-        this.middleClickRequirements = middleClickRequirements;
-    }
-
-    public List<Action> getMiddleClickActions() {
-        return middleClickActions;
-    }
-
-    public void setMiddleClickActions(List<Action> middleClickActions) {
-        this.middleClickActions = middleClickActions;
-    }
-
-    public List<Requirement> getRightClickRequirements() {
-        return rightClickRequirements;
-    }
-
-    public void setRightClickRequirements(List<Requirement> rightClickRequirements) {
-        this.rightClickRequirements = rightClickRequirements;
-    }
-
-    public List<Action> getRightClickActions() {
-        return rightClickActions;
-    }
-
-    public void setRightClickActions(List<Action> rightClickActions) {
-        this.rightClickActions = rightClickActions;
-    }
-
-    public List<Requirement> getRightShiftClickRequirements() {
-        return rightShiftClickRequirements;
-    }
-
-    public void setRightShiftClickRequirements(List<Requirement> rightShiftClickRequirements) {
-        this.rightShiftClickRequirements = rightShiftClickRequirements;
-    }
-
-    public List<Action> getRightShiftClickActions() {
-        return rightShiftClickActions;
-    }
-
-    public void setRightShiftClickActions(List<Action> rightShiftClickActions) {
-        this.rightShiftClickActions = rightShiftClickActions;
-    }
-
-    public ItemStack getItemStack(Player player, String[][] replacements) {
-        ItemStack newItemStack = new ItemStack(itemStack);
-        ItemMeta newItemMeta = newItemStack.getItemMeta();
-        if (!displayName.equals("")) {
-            String newDisplayName = new String(displayName);
-            newDisplayName = StringUtil.replaceText(newDisplayName, player, replacements);
-            newDisplayName = StringUtil.addColor(newDisplayName);
-            newItemMeta.setDisplayName(displayName);
-        }
-        if (!lore.isEmpty()) {
-            List<String> newLore = new ArrayList<>();
-            for (String line:lore) {
-                String newLine = new String(line);
-                newLine = StringUtil.replaceText(newLine, player, replacements);
-                newLine = StringUtil.addColor(newLine);
-                newLore.add(newLine);
+    public void updateItem(Player player) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        // display_name
+        String newDisplayName = new String(displayName);
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) newDisplayName = PlaceholderAPI.setPlaceholders(player, newDisplayName);
+        newDisplayName = ChatColor.translateAlternateColorCodes('&', newDisplayName);
+        itemMeta.setDisplayName(newDisplayName);
+        // lore
+        List<String> newLore = new ArrayList<>();
+        for (String line:lore) {
+            if (player != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                line = PlaceholderAPI.setPlaceholders(player, line);
             }
-            newItemMeta.setLore(newLore);
+            line = ChatColor.translateAlternateColorCodes('&', line);
+            newLore.add(line);
         }
-        newItemStack.setItemMeta(newItemMeta);
-        return newItemStack;
+        itemMeta.setLore(newLore);
+        itemStack.setItemMeta(itemMeta);
     }
 
 }

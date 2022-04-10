@@ -8,7 +8,6 @@ import com.mojang.authlib.properties.Property;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTType;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -21,9 +20,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
@@ -57,6 +54,10 @@ public class SimpleYaml {
         this.name = name;
     }
 
+    public JavaPlugin getJavaPlugin() {
+        return javaPlugin;
+    }
+
     public String getName() {
         return name;
     }
@@ -79,7 +80,6 @@ public class SimpleYaml {
             try {
                 if (file.createNewFile()) {
                     if (javaPlugin != null) {
-                        javaPlugin.getLogger().info(directory);
                         String localDirectory = "";
                         if (!directory.equals(javaPlugin.getDataFolder().getPath())) {
                             localDirectory = StringUtils.remove(directory, javaPlugin.getDataFolder().getPath());
@@ -87,20 +87,16 @@ public class SimpleYaml {
                             localDirectory = StringUtils.removeStart(localDirectory, "/");
                             localDirectory = localDirectory + "/";
                         }
-                        javaPlugin.getLogger().info(localDirectory);
-                        if (javaPlugin.getResource(  localDirectory + name + ".yml") != null) {
-                            if(file.length() == 0){
-                                javaPlugin.saveResource(localDirectory + name + ".yml", true);
-                            }
-                        }
+                        if (javaPlugin.getResource(  localDirectory + name + ".yml") != null) javaPlugin.saveResource(localDirectory + name + ".yml", true);
                     }
                 }
             } catch (IOException | IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
+
         try {
-            yamlConfiguration = new YamlConfiguration(file);
+            yamlConfiguration = new YamlConfiguration(file, false, true);
             yamlConfiguration.reload();
             // load global replacements
             if (contains("replacements.global") && yamlConfiguration.isConfigurationSection("replacements.global")) {
