@@ -95,7 +95,12 @@ public class SimpleYaml {
             }
         }
 
-        yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+        yamlConfiguration = new YamlConfiguration();
+        try{
+            yamlConfiguration.load(file);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         // load global replacements
         if (contains("replacements.global") && yamlConfiguration.isConfigurationSection("replacements.global")) {
             for (String key:getConfigurationSection("replacements.global").getKeys(false)) {
@@ -110,8 +115,12 @@ public class SimpleYaml {
         }
     }
 
-    public void saveYamlFile() throws IOException {
-        yamlConfiguration.save(file);
+    public void saveYamlFile() {
+        try{
+            yamlConfiguration.save(file);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public YamlConfiguration getYamlConfiguration() {
