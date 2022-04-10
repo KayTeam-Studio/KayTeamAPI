@@ -1,8 +1,6 @@
 package org.kayteam.api.simple.yaml;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.loohp.yamlconfiguration.ConfigurationSection;
-import com.loohp.yamlconfiguration.YamlConfiguration;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -19,6 +17,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -95,28 +95,23 @@ public class SimpleYaml {
             }
         }
 
-        try {
-            yamlConfiguration = new YamlConfiguration(file, false, true);
-            yamlConfiguration.reload();
-            // load global replacements
-            if (contains("replacements.global") && yamlConfiguration.isConfigurationSection("replacements.global")) {
-                for (String key:getConfigurationSection("replacements.global").getKeys(false)) {
-                    SimpleYaml.globalReplacements.put(key, getString("replacements.global." + key));
-                }
+        yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+        // load global replacements
+        if (contains("replacements.global") && yamlConfiguration.isConfigurationSection("replacements.global")) {
+            for (String key:getConfigurationSection("replacements.global").getKeys(false)) {
+                SimpleYaml.globalReplacements.put(key, getString("replacements.global." + key));
             }
-            // load local replacements
-            if (contains("replacements.local") && yamlConfiguration.isConfigurationSection("replacements.local")) {
-                for (String key:getConfigurationSection("replacements.local").getKeys(false)) {
-                    replacements.put(key, getString("replacements.local." + key));
-                }
+        }
+        // load local replacements
+        if (contains("replacements.local") && yamlConfiguration.isConfigurationSection("replacements.local")) {
+            for (String key:getConfigurationSection("replacements.local").getKeys(false)) {
+                replacements.put(key, getString("replacements.local." + key));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public void saveYamlFile() {
-        yamlConfiguration.save();
+    public void saveYamlFile() throws IOException {
+        yamlConfiguration.save(file);
     }
 
     public YamlConfiguration getYamlConfiguration() {
@@ -134,13 +129,13 @@ public class SimpleYaml {
         return new File(directory, name + ".yml").exists();
     }
 
-    public void generateBackup() {
+    public void generateBackup() throws IOException {
         SimpleYaml backup = new SimpleYaml(directory, name + "-backup");
         backup.registerYamlFile();
         backup.saveWithOtherFileConfiguration(yamlConfiguration);
     }
 
-    public void saveWithOtherFileConfiguration(YamlConfiguration yamlConfiguration) {
+    public void saveWithOtherFileConfiguration(YamlConfiguration yamlConfiguration) throws IOException {
         this.yamlConfiguration = yamlConfiguration;
         saveYamlFile();
     }
@@ -159,7 +154,7 @@ public class SimpleYaml {
         return simpleYamlList;
     }
 
-    public String getAboveComment(String path) {
+    /*public String getAboveComment(String path) {
         return yamlConfiguration.getAboveComment(path);
     }
 
@@ -173,7 +168,7 @@ public class SimpleYaml {
 
     public void setInlineComment(String path, String comment) {
         yamlConfiguration.setInlineComment(path, comment);
-    }
+    }*/
 
     public boolean isConfigurationSection(String path) {
         return yamlConfiguration.isConfigurationSection(path);
@@ -320,12 +315,12 @@ public class SimpleYaml {
     }
 
     public List<Object> getList(String path) {
-        if (contains(path) && isList(path)) return yamlConfiguration.getList(path);
+        if (contains(path) && isList(path)) return (List<Object>) yamlConfiguration.getList(path);
         return new ArrayList<>();
     }
 
     public List<Object> getList(String path, List<Object> def) {
-        if (contains(path) && isList(path)) return yamlConfiguration.getList(path);
+        if (contains(path) && isList(path)) return (List<Object>) yamlConfiguration.getList(path);
         return def;
     }
 
